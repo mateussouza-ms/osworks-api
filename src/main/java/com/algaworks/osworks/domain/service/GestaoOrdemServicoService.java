@@ -16,10 +16,10 @@ import com.algaworks.osworks.domain.repository.OrdemServicoRepository;
 public class GestaoOrdemServicoService {
 
 	@Autowired
-	OrdemServicoRepository ordemServicoRepository;
+	private OrdemServicoRepository ordemServicoRepository;
 	
 	@Autowired
-	ClienteRepository clienteRepository;
+	private ClienteRepository clienteRepository;
 	
 	public OrdemServico criar(OrdemServico ordemServico) {
 		Cliente cliente = clienteRepository.findById(ordemServico.getCliente().getId())
