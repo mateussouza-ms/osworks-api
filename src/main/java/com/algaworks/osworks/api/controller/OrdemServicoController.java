@@ -1,4 +1,4 @@
-package com.algaworks.osworks.api;
+package com.algaworks.osworks.api.controller;
 
 import java.util.List;
 import java.util.Optional;
