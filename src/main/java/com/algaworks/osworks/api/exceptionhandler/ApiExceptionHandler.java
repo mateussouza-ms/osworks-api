@@ -1,6 +1,5 @@
 package com.algaworks.osworks.api.exceptionhandler;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +30,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<Object> handleEntidadeNaoEncontrada(NegocioException ex, WebRequest request) {
 		var status = HttpStatus.NOT_FOUND;
 		
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo(ex.getMessage());
-		problema.setDataHora(OffsetDateTime.now());
+		var problema = new Problema(status.value(), ex.getMessage());
 
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
@@ -43,10 +39,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request) {
 		var status = HttpStatus.BAD_REQUEST;
 		
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo(ex.getMessage());
-		problema.setDataHora(OffsetDateTime.now());
+		var problema = new Problema(status.value(), ex.getMessage());
 
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
@@ -64,11 +57,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			campos.add(new Problema.Campo(nome, mensagem));
 		}
 	
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente");
-		problema.setDataHora(OffsetDateTime.now());
-		problema.setCampos(campos);
+		var problema = new Problema(
+				status.value(), 
+				"Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente",
+				campos);
+		
 		
 		return super.handleExceptionInternal(ex, problema, headers, status, request);
 	}
