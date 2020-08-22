@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.algaworks.osworks.domain.exception.NegocioException;
+
 @Entity
 public class OrdemServico {
 
@@ -127,5 +129,40 @@ public class OrdemServico {
 			return false;
 		return true;
 	}
+
+	
+	public boolean podeSerFinalizada() {
+		return getStatus().equals(StatusOrdemServico.ABERTA);		
+	}
+	
+	public boolean naoPodeSerFinalizada() {
+		return !getStatus().equals(StatusOrdemServico.ABERTA);		
+	}
+	
+	public boolean podeSerCancelada() {
+		return getStatus().equals(StatusOrdemServico.ABERTA);		
+	}
+	
+	public boolean naoPodeSerCancelada() {
+		return !getStatus().equals(StatusOrdemServico.ABERTA);		
+	}
+	
+	public void finalizar() {
+		if(naoPodeSerFinalizada()) {
+			throw new NegocioException("Ordem de serviço não pode ser finalizada");
+		};
+		
+		setStatus(StatusOrdemServico.FINALIZADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+
+	public void cancelar() {
+		if(naoPodeSerCancelada()) {
+			throw new NegocioException("Ordem de serviço não pode ser cancelada");
+		};
+		
+		setStatus(StatusOrdemServico.CANCELADA);
+	}
+
 
 }
